@@ -26,7 +26,7 @@ public class FileMain05 {
 		try(
 				FileOutputStream out = new FileOutputStream(fileName);
 				BufferedOutputStream bout = new BufferedOutputStream(out);
-				ObjectOutputStream oos = new ObjectOutputStream(out);
+				ObjectOutputStream oos = new ObjectOutputStream(bout);
 		) {
 			oos.writeObject(list);
 			System.out.println("파일 작성 성공");
@@ -41,10 +41,10 @@ public class FileMain05 {
 		try(
 				FileInputStream in = new FileInputStream(fileName);
 				BufferedInputStream bin = new BufferedInputStream(in);
-				ObjectInputStream ois = new ObjectInputStream(in);
+				ObjectInputStream ois = new ObjectInputStream(bin);
 			) {
 			list = (ArrayList<Product>) ois.readObject();
-			System.out.println(list);
+			System.out.println(list.get(10));
 			
 		} catch(Exception e) {
 			e.printStackTrace();

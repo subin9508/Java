@@ -170,7 +170,7 @@ public class ContactMain03 {
 		
 		System.out.print("삭제할 인덱스>> ");
 		int index = Integer.parseInt(scanner.nextLine());
-		List<Contact> contacts = dao.read(); 
+		
 		int result = dao.delete(index);
 		if(result == 1) {
 			System.out.println("연락처 삭제 성공");
