@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class AppMain05 {
 
@@ -21,8 +22,9 @@ public class AppMain05 {
 	private JTextField textName;
 	private JTextField textPhone;
 	private JTextField textEmail;
-	private JButton btnNewButton;
-	private JTextArea textResult;
+	private JButton btnInput;
+	private JTextArea textArea;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -88,19 +90,24 @@ public class AppMain05 {
 		frame.getContentPane().add(textEmail);
 		textEmail.setColumns(10);
 		
-		btnNewButton = new JButton("입력");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnInput = new JButton("입력");
+		btnInput.setFont(new Font("D2Coding", Font.PLAIN, 12));
+		btnInput.addActionListener(new ActionListener() { // 익명 내부 클래스
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				handleInputButtonClick();
 			}
 		});
-		btnNewButton.setBounds(397, 125, 116, 37);
-		frame.getContentPane().add(btnNewButton);
+		btnInput.setBounds(397, 125, 116, 37);
+		frame.getContentPane().add(btnInput);
 		
-		textResult = new JTextArea();
-		textResult.setBounds(22, 201, 491, 121);
-		frame.getContentPane().add(textResult);
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(22, 201, 491, 121);
+		frame.getContentPane().add(scrollPane);
+		
+		textArea = new JTextArea();
+		textArea.setFont(new Font("D2Coding", Font.PLAIN, 13));
+		scrollPane.setViewportView(textArea);
 	}
 	
 	private void handleInputButtonClick() {
@@ -109,9 +116,15 @@ public class AppMain05 {
 		String phone = textPhone.getText();
 		String email = textEmail.getText();
 	
-		String msg = String.format("이름: %s\n전화번호: %s\n이메일: %s\n", name, phone, email);
-		textResult.setText(msg);
+		String msg = String.format("이름: %s 전화번호: %s 이메일: %s\n", name, phone, email);
 		
+		
+		// textArea.append(msg); // 이름, 전화번호, 이메일을 JTextArea에 씀.
+		textArea.append(msg); // apppend() : 주어진 텍스트를 기존 내용 뒤에 추가한다. 
+		
+		
+		
+		//모든 JTextField의 입력된 내용을 지움.
 		textName.setText("");
 		textPhone.setText("");
 		textEmail.setText("");
