@@ -1,25 +1,38 @@
 package com.itwill.swing07;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 public class MyDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L; // -> 없어도 되는 코드.
 	private final JPanel contentPanel = new JPanel();
+	private JPanel buttonPanel;
+	private JButton cancelButton;
+	private JButton okButton;
+	private JLabel lblNewLabel;
+	private JTextField textField;
+	private JButton btnNewButton;
+	
+	// 부모 컴포넌트를 저장하기 위한 필드
+	private Component parentComponent;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void showMyDialog(Component parentComponent) {
 		try {
-			MyDialog dialog = new MyDialog();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			MyDialog dialog = new MyDialog(parentComponent);
+//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); // DISPOSE: 자신의 창만 닫음. 메인 프로그램은 남김.
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -29,28 +42,56 @@ public class MyDialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public MyDialog() {
-		setBounds(100, 100, 450, 300);
+	public MyDialog(Component parentComponent) {
+		this.parentComponent = parentComponent;
+		initialize();
+	}
+	
+	private void initialize() {
+		// 다이얼로그의 좌표(x, y)와 크기(width, height)
+		setBounds(100, 100, 577, 441);
+		// setLocationRelativeTo(null); : setBounds의 (x, y) 좌표를 무시하고 항상 스크린의 가운데에 위치.
+		setLocationRelativeTo(parentComponent); // setBounds의 (x, y) 좌표를 무시하고 부모 컴포넌트에 상대적으로(부모의 가운데 위치) 배치.
+		
+
+		// 다이얼로그의 닫기 버튼(X)의 기본 동작을 설정:
+		// DISPOSE_ON_CLOSE: 현재 다이얼로그만 닫고, 메인 프로세스는 계속 실행
+		
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+		// getContentPane(): 컨텐트 영역 & 버튼 영역
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
-	}
+		contentPanel.setLayout(null);
+		
+		lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(12, 10, 57, 15);
+		contentPanel.add(lblNewLabel);
+		
+		textField = new JTextField();
+		textField.setBounds(12, 55, 198, 45);
+		contentPanel.add(textField);
+		textField.setColumns(10);
+		
+		btnNewButton = new JButton("New button");
+		btnNewButton.setBounds(12, 121, 97, 23);
+		contentPanel.add(btnNewButton);
 
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		
+				cancelButton = new JButton("Cancel");
+				cancelButton.setFont(new Font("D2Coding", Font.PLAIN, 20));
+				cancelButton.setActionCommand("Cancel");
+				buttonPanel.add(cancelButton);
+
+		okButton = new JButton("OK");
+		okButton.setFont(new Font("D2Coding", Font.PLAIN, 20));
+		okButton.setActionCommand("OK");
+		buttonPanel.add(okButton);
+		getRootPane().setDefaultButton(okButton);
+
+	} // end initialize
 }
