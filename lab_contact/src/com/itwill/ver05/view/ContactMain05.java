@@ -17,10 +17,12 @@ import com.itwill.ver05.controller.ContactDao;
 import com.itwill.ver05.controller.ContactDaoImpl;
 import com.itwill.ver05.model.Contact;
 import com.itwill.ver05.view.ContactCreateFrame.CreateNotify;
+import com.itwill.ver05.view.ContactUpdateFrame.UpdateNotify;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ContactMain05 implements CreateNotify {
+public class ContactMain05 implements CreateNotify, UpdateNotify {
     
     private static final String[] COLUMN_NAMES = { "이름", "전화번호" };
 
@@ -80,9 +82,7 @@ public class ContactMain05 implements CreateNotify {
         buttonPanel.add(btnCreate);
         
         btnUpdate = new JButton("업데이트");
-        btnUpdate.addActionListener((e) -> 
-                ContactUpdateFrame.showContactUpdateFrame()
-        );
+        btnUpdate.addActionListener((e) -> updateContact());
         btnUpdate.setFont(new Font("D2Coding", Font.BOLD, 28));
         buttonPanel.add(btnUpdate);
         
@@ -92,6 +92,9 @@ public class ContactMain05 implements CreateNotify {
         buttonPanel.add(btnDelete);
         
         btnSearch = new JButton("검색");
+        btnSearch.addActionListener((e) -> 
+        		ContactSearchFrame.showContactSearchFrame(frame)
+        		);
         btnSearch.setFont(new Font("D2Coding", Font.BOLD, 28));
         buttonPanel.add(btnSearch);
         
@@ -99,17 +102,45 @@ public class ContactMain05 implements CreateNotify {
         frame.getContentPane().add(scrollPane, BorderLayout.CENTER);
         
         table = new JTable();
+        
+        // 테이블 컬럼 이름의 폰트 설정
+        table.getTableHeader().setFont(new Font("D2Coding", Font.PLAIN, 16));
+        
+        // 테이블 데이터 행의 폰트 설정
+        table.setFont(new Font("D2Coding", Font.PLAIN, 16));
+        // 테이블의 행 높이(세로)를 설정
+        table.setRowHeight(25);
+        
+        
         model = new DefaultTableModel(null, COLUMN_NAMES);
         table.setModel(model);
         scrollPane.setViewportView(table);
     }
+    
+    private void updateContact() {
+    	// 테이블에서 업데이트하기 위해서 선택한 행의 인덱스를 찾음.
+    	int index = table.getSelectedRow();
+    	if(index == -1) {
+    		JOptionPane.showMessageDialog(frame, "먼저 테이블에서 업데이트할 행을 선택하세요.");
+    		return;
+    	}
+    	
+    	// 업데이트 프레임(JFrame)을 실행
+    	ContactUpdateFrame.showContactUpdateFrame(frame, index, ContactMain05.this);
+    	
+    }
+    
+    
+    
+    
+    
     
     private void deleteContact() {
         // 테이블에서 선택된 행(row)의 인덱스를 찾음.
         int index = table.getSelectedRow();
         if (index == -1) {
             JOptionPane.showMessageDialog(frame, 
-                    "먼저 테이블에서 삭제할 행을 선택하세요...", 
+                    "먼저 테이블에서 삭제할 행을 선택하세요.", 
                     "경고", 
                     JOptionPane.WARNING_MESSAGE);
             
@@ -140,7 +171,7 @@ public class ContactMain05 implements CreateNotify {
         
         // 리스트의 연락처들을 테이블에 행으로 추가.
         for (Contact c : list) {
-            Object[] row = { c.getName(), c.getPhone() };
+            Object[] row = { c.getName(), c.getPhone(), c.getEmail()};
             model.addRow(row);
         }
         
@@ -152,7 +183,7 @@ public class ContactMain05 implements CreateNotify {
         // 파일에 저장된 연락처(새 연락처가 추가된 데이터)를 로딩
         loadContactData();
         // 새 테이블 모델을 테이블에 다시 세팅
-        table.setModel(model);
+        table.setModel(model); 
     }
     
     @Override // ContactCreateFrame.CreateNotify 인터페이스의 메서드 재정의
@@ -162,5 +193,16 @@ public class ContactMain05 implements CreateNotify {
         // 사용자에게 알림
         JOptionPane.showMessageDialog(frame, "새 연락처 저장 성공!");
     }
+
+	@Override
+	public void notifyContactUpdated() {
+		// ContactUpdateFrame에서 연락처 정보를 성공적으로 업데이트하면 호출하는 메서드
+		// 테이블을 새로 그린다.(리셋)
+		resetTable();
+		
+		JOptionPane.showMessageDialog(frame, "새 연락처 업데이트 성공!");
+	}
+
+	
 
 }
