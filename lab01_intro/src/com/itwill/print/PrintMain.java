@@ -21,7 +21,9 @@ public class PrintMain {
 		// \t:탭(tab)
 		System.out.printf("문자열 포맷: 정수(%d), 실수(%f), 문자열(%s)\n", 123, 3.14, "홍길동"); 
 		// 순서대로 타입에 맞게 값을 끌고 옴, 줄 바꿈을 위한 백슬래쉬(\n)는 띄어쓰지 않는다.
-		System.out.printf("%d + %d = %d", 1, 2, (1+2));
+		System.out.printf("%d + %d = %d\n", 1, 2, (1+2));
+		
+		
 	}
 
 }
