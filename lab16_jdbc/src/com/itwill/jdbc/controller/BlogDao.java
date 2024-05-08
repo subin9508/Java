@@ -124,7 +124,7 @@ public class BlogDao {
     }
     // create(Blog blog) 메서드에서 사용할 SQL:
     // insert into blogs (title, content, writer) values (?, ?, ?)
-    private static final String SQL_INSERT = String.format("insert into %s (%s, %s, %s) values (?, ?, ?)", TBL_BLOGS, COL_TITLE, COL_CONTENT, COL_WRITER);
+    private static final String SQL_INSERT = String.format("insert into %s (%s, %s, %s) values (?, ?, ?)", TBL_BLOGS, COL_ID, COL_CONTENT, COL_WRITER);
     
     
     /**
